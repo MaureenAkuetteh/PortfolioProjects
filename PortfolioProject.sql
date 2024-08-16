@@ -1,3 +1,56 @@
+/* 
+
+Cleaning data in SQL Queries
+
+
+*/
+
+
+Select *
+from PortfolioProject.dbo.NashvilleHousing
+
+
+--Standardise Date Fomart
+
+Select SaleDate, convert(date,saledate)
+from PortfolioProject.dbo.NashvilleHousing
+
+Alter table PortfolioProject..NashvilleHousing
+add SaleDateConverted date;
+
+Update PortfolioProject..NashvilleHousing
+set SaleDateConverted = convert(date,saledate)
+
+ 
+--Populate Property Address data
+
+Select *
+from PortfolioProject.dbo.NashvilleHousing
+where PropertyAddress is null
+order by ParcelID
+
+
+select a.ParcelID, a.PropertyAddress, b.ParcelID, b.PropertyAddress, isnull(a.PropertyAddress,b.PropertyAddress)
+from PortfolioProject.dbo.NashvilleHousing a
+join PortfolioProject.dbo.NashvilleHousing b
+on a.ParcelID = b.ParcelID
+and a.[UniqueID ] <> b.[UniqueID ]
+where a.PropertyAddress is null	
+
+
+update a
+set PropertyAddress = isnull(a.PropertyAddress,b.PropertyAddress)
+from PortfolioProject.dbo.NashvilleHousing a
+join PortfolioProject.dbo.NashvilleHousing b
+on a.ParcelID = b.ParcelID
+and a.[UniqueID ] <> b.[UniqueID ]
+where a.PropertyAddress is null	
+
+
+
+select PropertyAddress 
+from PortfolioProject.dbo.NashvilleHousing
+
 select * 
 from PortfolioProject..CovidDeaths
 where continent is not null
@@ -135,5 +188,7 @@ where dea.continent is not null
 
 select *
 from PercentagePopulationVaccinated
+
+
 
 
